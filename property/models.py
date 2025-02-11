@@ -54,6 +54,12 @@ class Flat(models.Model):
         help_text='''Да — новостройка, Нет — старое здание,
         Неизвестно — не заполнено.''')
     
+    liked_by = models.ManyToManyField(
+        User, 
+        blank=True, 
+        related_name='liked_flat', 
+        verbose_name='Кто лайкнул')
+    
 
     def __str__(self):
         return f'{self.town}, {self.address} ({self.price}р.)'

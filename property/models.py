@@ -7,10 +7,8 @@ from phonenumber_field.modelfields import PhoneNumberField
 class Flat(models.Model):
     owner = models.CharField('ФИО владельца', max_length=200)
     owner_pure_phone = PhoneNumberField(
-        'Нормализованный номер владельца', 
-        region='RU', 
-        blank=True, 
-        null=True)
+        'Нормализованный номер владельца', region='RU', blank=True, null=True)
+    owners_phonenumber = models.CharField('Номер владельца', max_length=20)
     created_at = models.DateTimeField(
         'Когда создано объявление',
         default=timezone.now,
@@ -52,34 +50,34 @@ class Flat(models.Model):
         null=True,
         blank=True,
         db_index=True)
-    
+
     new_building = models.BooleanField(
         'Новостройка',
         null=True,
         help_text='''Да — новостройка, Нет — старое здание,
         Неизвестно — не заполнено.''')
-    
+
     liked_by = models.ManyToManyField(
         User,
         blank=True,
         related_name='liked_flat',
         verbose_name='Кто лайкнул')
-    
-    
+
     def __str__(self):
         return f'{self.town}, {self.address} ({self.price}р.)'
-    
+
+
 class Complaint(models.Model):
-    user = models.ForeignKey( 
-        User, 
-        on_delete=models.CASCADE, 
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
         related_name='complaints',
         verbose_name='Кто жаловался')
-    
-    flat = models.ForeignKey( 
-        Flat, 
-        on_delete=models.CASCADE, 
+
+    flat = models.ForeignKey(
+        Flat,
+        on_delete=models.CASCADE,
         related_name='complaints',
         verbose_name='Квартира, на которую пожаловались')
-    
+
     description = models.TextField('Текст жалобы')

@@ -15,6 +15,7 @@ class Owner(models.Model):
     def __str__(self):
         return self.full_name
 
+
 class Flat(models.Model):
     created_at = models.DateTimeField(
         'Когда создано объявление',

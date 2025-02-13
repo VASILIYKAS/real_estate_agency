@@ -7,6 +7,7 @@ class FlatsInline(admin.TabularInline):
     model = Flat.owners.through
     raw_id_fields = ('owner',)
 
+
 class FlatAdmin(admin.ModelAdmin):
     search_fields = ('owner', 'town', 'address',)
     readonly_fields = ['created_at',]
@@ -19,6 +20,7 @@ class FlatAdmin(admin.ModelAdmin):
     list_filter = ('new_building',)
     raw_id_fields = ('liked_by',)
     inlines = [FlatsInline]
+
 
 admin.site.register(Flat, FlatAdmin)
 

@@ -89,3 +89,6 @@ class Complaint(models.Model):
         verbose_name='Квартира, на которую пожаловались')
 
     description = models.TextField('Текст жалобы')
+
+    def __str__(self):
+        return f'{self.user}, {self.flat}'

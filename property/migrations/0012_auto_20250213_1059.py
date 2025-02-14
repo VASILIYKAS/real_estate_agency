@@ -7,23 +7,17 @@ def data_transfer(apps, schema_editor):
     Flat = apps.get_model('property', 'Flat')
     Owner = apps.get_model('property', 'Owner')
 
-    for flat in Flat.objects.all():
+    for flat in Flat.objects.iterator(chunk_size=200):
         owner_name = flat.owner
         owner_pure_phone = flat.owner_pure_phone
         owners_phonenumber = flat.owners_phonenumber
 
         if owner_name:
             Owner.objects.get_or_create(
-                full_name=owner_name, 
-                owner_pure_phone=owner_pure_phone, 
+                full_name=owner_name,
+                owner_pure_phone=owner_pure_phone,
                 owners_phonenumber=owners_phonenumber
             )
-        
-
-
-
-
-
 
 
 class Migration(migrations.Migration):

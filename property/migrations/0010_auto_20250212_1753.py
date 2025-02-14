@@ -9,16 +9,21 @@ def standardized_phone_number(apps, schema_editor):
 
     for flat in Flat.objects.iterator(chunk_size=200):
         phone_number = flat.owners_phonenumber
-        if phone_number:
-            parse_phone_number = phonenumbers.parse(phone_number, 'RU')
-            if phonenumbers.is_valid_number(parse_phone_number):
-                standardized_phone_number = phonenumbers.format_number(
-                    parse_phone_number,
-                    phonenumbers.PhoneNumberFormat.E164)
 
-                flat.owner_pure_phone = standardized_phone_number
-            else:
-                flat.owner_pure_phone = None
+        if not phone_number:
+            flat.owner_pure_phone = None
+            continue
+
+        parse_phone_number = phonenumbers.parse(phone_number, 'RU')
+
+        if not phonenumbers.is_valid_number(parse_phone_number):
+            flat.owner_pure_phone = None
+            continue
+        
+        standardized_phone_number = phonenumbers.format_number(
+            parse_phone_number,
+            phonenumbers.PhoneNumberFormat.E164)
+        flat.owner_pure_phone = standardized_phone_number
         flat.save()
 
 

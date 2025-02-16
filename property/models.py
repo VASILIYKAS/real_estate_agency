@@ -6,10 +6,10 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 class Owner(models.Model):
     full_name = models.CharField('ФИО владельца', max_length=200)
-    owner_pure_phone = PhoneNumberField(
+    pure_phone = PhoneNumberField(
         'Нормализованный номер владельца', region='RU', blank=True, null=True)
-    owners_phonenumber = models.CharField('Номер владельца', max_length=20)
-    owner_flats = models.ManyToManyField(
+    phonenumber = models.CharField('Номер владельца', max_length=20)
+    flats = models.ManyToManyField(
         'Flat', verbose_name='Квартиры в собственности', related_name='flats')
 
     def __str__(self):

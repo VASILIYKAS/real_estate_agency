@@ -4,7 +4,7 @@ from .models import Flat, Complaint, Owner
 
 
 class FlatsInline(admin.TabularInline):
-    model = Flat.flats.through
+    model = Flat.owners.through
     raw_id_fields = ('owner',)
 
 

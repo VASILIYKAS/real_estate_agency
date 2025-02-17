@@ -8,23 +8,18 @@ def standardized_phone_number(apps, schema_editor):
     Flat = apps.get_model('property', 'Flat')
 
     for flat in Flat.objects.iterator(chunk_size=200):
-        phone_number = flat.owners_phonenumber
+        phone_number = flat.phonenumber
 
-        if not phone_number:
-            flat.owner_pure_phone = None
-            continue
+        if not phone_number or not phonenumbers.is_valid_number(
+                phonenumbers.parse(phone_number, 'RU')):
+            flat.pure_phone = None
+            flat.save()
 
-        parse_phone_number = phonenumbers.parse(phone_number, 'RU')
-
-        if not phonenumbers.is_valid_number(parse_phone_number):
-            flat.owner_pure_phone = None
-            continue
-        
-        standardized_phone_number = phonenumbers.format_number(
-            parse_phone_number,
-            phonenumbers.PhoneNumberFormat.E164)
-        flat.owner_pure_phone = standardized_phone_number
-        flat.save()
+        else:
+            parse_phone_number = phonenumbers.parse(phone_number, 'RU')
+            flat.pure_phone = phonenumbers.format_number(
+                parse_phone_number, phonenumbers.PhoneNumberFormat.E164)
+            flat.save()
 
 
 class Migration(migrations.Migration):
